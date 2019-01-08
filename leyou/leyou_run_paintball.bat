@@ -1,0 +1,5 @@
+@echo off
+cd ..
+echo "‘À––¿÷”≈æ∫≤ ◊„«Ú"
+python run_paintball_leyou.py
+exit

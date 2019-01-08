@@ -1,0 +1,5 @@
+@echo off
+cd ..
+echo "¿÷¬ÿ3D"
+python run_three_D_lelun.py
+exit

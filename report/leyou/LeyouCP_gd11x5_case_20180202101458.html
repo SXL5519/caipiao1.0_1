@@ -1,0 +1,3329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>乐优广东11选5——自动化测试报告</title>
+    <meta name="generator" content="HTMLTestRunner 0.8.3"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+<style type="text/css" media="screen">
+body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
+table       { font-size: 100%; }
+pre         { }
+
+/* -- heading ---------------------------------------------------------------------- */
+h1 {
+	font-size: 16pt;
+	color: gray;
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+
+/* -- css div popup ------------------------------------------------------------------------ */
+a.popup_link {
+}
+
+a.popup_link:hover {
+    color: red;
+}
+.img{
+	width: 100%;
+	height: 100%;
+	border-collapse: collapse;
+    border: 2px solid #777;
+}
+
+.screenshots {
+    z-index: 100;
+	position:absolute;
+	left: 23%;
+	top: 20%;
+	display: none;
+}
+.close_shots {
+	position:absolute;
+	top:0; left:98%;
+	z-index:99;
+	width:20px;
+}
+.popup_window {
+    display: none;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    /*border: solid #627173 1px; */
+    padding: 10px;
+    background-color: #E6E6D6;
+    font-family: "Lucida Console", "Courier New", Courier, monospace;
+    text-align: left;
+    font-size: 8pt;
+    width: 500px;
+}
+
+}
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    width: 80%;
+    border-collapse: collapse;
+    border: 1px solid #777;
+}
+#header_row {
+    font-weight: bold;
+    color: white;
+    background-color: #777;
+}
+#result_table td {
+    border: 1px solid #777;
+    padding: 2px;
+}
+#total_row  { font-weight: bold; }
+.passClass  { background-color: #6c6; }
+.failClass  { background-color: #c60; }
+.errorClass { background-color: #c00; }
+.passCase   { color: #6c6; }
+.failCase   { color: #c60; font-weight: bold; }
+.errorCase  { color: #c00; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+
+/* -- ending ---------------------------------------------------------------------- */
+#ending {
+}
+
+
+.piechart{
+    position:absolute;  ;
+    top:20px;
+    left:300px;
+    width: 200px;
+    float: left;
+    display:  inline;
+}
+
+
+</style>
+
+</head>
+<body>
+<script language="javascript" type="text/javascript">
+output_list = Array();
+
+/* level - 0:Summary; 1:Failed; 2:All */
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level < 1) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level > 1) {
+                tr.className = '';
+            }
+            else {
+                tr.className = 'hiddenRow';
+            }
+        }
+    }
+}
+
+
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        tid0 = 't' + cid.substr(1) + '.' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        if (toHide) {
+            document.getElementById('div_'+tid).style.display = 'none'
+            document.getElementById(tid).className = 'hiddenRow';
+        }
+        else {
+            document.getElementById(tid).className = '';
+        }
+    }
+}
+
+
+function showTestDetail(div_id){
+    var details_div = document.getElementById(div_id)
+    var displayState = details_div.style.display
+    // alert(displayState)
+    if (displayState != 'block' ) {
+        displayState = 'block'
+        details_div.style.display = 'block'
+    }
+    else {
+        details_div.style.display = 'none'
+    }
+}
+
+
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+
+function drawCircle(pass, fail, error){
+    var color = ["#6c6","#c60","#c00"];
+    var data = [pass,fail,error];
+    var text_arr = ["pass", "fail", "error"];
+
+    var canvas = document.getElementById("circle");
+    var ctx = canvas.getContext("2d");
+    var startPoint=0;
+    var width = 20, height = 10;
+    var posX = 112 * 2 + 20, posY = 30;
+    var textX = posX + width + 5, textY = posY + 10;
+    for(var i=0;i<data.length;i++){
+        ctx.fillStyle = color[i];
+        ctx.beginPath();
+        ctx.moveTo(112,84);
+        ctx.arc(112,84,84,startPoint,startPoint+Math.PI*2*(data[i]/(data[0]+data[1]+data[2])),false);
+        ctx.fill();
+        startPoint += Math.PI*2*(data[i]/(data[0]+data[1]+data[2]));
+        ctx.fillStyle = color[i];
+        ctx.fillRect(posX, posY + 20 * i, width, height);
+        ctx.moveTo(posX, posY + 20 * i);
+        ctx.font = 'bold 14px';
+        ctx.fillStyle = color[i];
+        var percent = text_arr[i] + ":"+data[i];
+        ctx.fillText(percent, textX, textY + 20 * i);
+
+    }
+}
+
+function show_shots(obj) {
+	obj.nextElementSibling.style.display="block";
+
+}
+
+function close_shots(obj) {
+	obj.parentElement.style.display="none";
+}
+
+</script>
+<div class="piechart">
+    <div>
+        <canvas id="circle" width="350" height="168" </canvas>
+    </div>
+</div>
+<div class='heading'>
+<h1>乐优广东11选5——自动化测试报告</h1>
+<p class='attribute'><strong>开始时间:</strong> 2018-02-02 10:14:58</p>
+<p class='attribute'><strong>耗时:</strong> 0:43:49.202000</p>
+<p class='attribute'><strong>状态:</strong> <span class="tj passCase">Pass</span>86 <span class="tj errorCase">Error</span>9</p>
+
+<p class='description'>运行环境：win7 Chrome</p>
+</div>
+
+
+
+<p id='show_detail_line'>显示
+<a href='javascript:showCase(0)'>概要</a>
+<a href='javascript:showCase(1)'>失败</a>
+<a href='javascript:showCase(2)'>所有</a>
+</p>
+
+<table id='result_table'>
+<colgroup>
+<col align='left' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+</colgroup>
+<tr id='header_row'>
+    <td>测试组/测试用例</td>
+    <td>总数</td>
+    <td>通过</td>
+    <td>失败</td>
+    <td>错误</td>
+    <td>视图</td>
+</tr>
+
+<tr class='passClass'>
+    <td>GuangDong11choose5.test_gd11x5_DanTuo_case.GD11X5DanTuoChooseCase: 广东11选5胆拖玩法测试流程</td>
+    <td>16</td>
+    <td>16</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c1',16)">详情</a></td>
+</tr>
+
+<tr id='pt1.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_front2_choose_1_2_case: 广东11选5胆拖玩法，前二组选玩法，选取1个胆码，2个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.1')" >
+        通过</a></span>
+
+    <div id='div_pt1.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.1: 没有弹窗
+距离第18020208期截止：
+02:14
+[7]
+[1, 2, 3, 4, 5, 6, 8, 9, 10, 11]
+[5, 6]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_front3_choose_1_3_case: 广东11选5胆拖玩法，前三组选玩法，1个胆码，3个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.2')" >
+        通过</a></span>
+
+    <div id='div_pt1.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.2: 没有弹窗
+距离第18020208期截止：
+01:53
+[9]
+[1, 2, 3, 4, 5, 6, 7, 8, 10, 11]
+[8, 10, 5]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_front3_choose_case: 广东11选5胆拖玩法，前三组选玩法，2个胆码，2个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.3')" >
+        通过</a></span>
+
+    <div id='div_pt1.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.3: 没有弹窗
+距离第18020208期截止：
+01:32
+[4, 11]
+[1, 2, 3, 5, 6, 7, 8, 9, 10]
+[2, 1]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option2_choose_1_2_case: 广东11选5胆拖玩法，任选二玩法，1个胆码，2个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.4')" >
+        通过</a></span>
+
+    <div id='div_pt1.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.4: 没有弹窗
+距离第18020208期截止：
+01:07
+[6]
+[1, 2, 3, 4, 5, 7, 8, 9, 10, 11]
+[10, 11]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option3_choose_1_3_case: 广东11选5胆拖玩法，任选三玩法，1个胆码，3个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.5')" >
+        通过</a></span>
+
+    <div id='div_pt1.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.5: 没有弹窗
+距离第18020208期截止：
+00:45
+[4]
+[1, 2, 3, 5, 6, 7, 8, 9, 10, 11]
+[11, 7, 1]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option3_choose_2_2_case: 广东11选5胆拖玩法，任选三玩法，2个胆码，2个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.6')" >
+        通过</a></span>
+
+    <div id='div_pt1.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.6: 没有弹窗
+距离第18020208期截止：
+00:23
+[10, 11]
+[1, 2, 3, 4, 5, 6, 7, 8, 9]
+[7, 1]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option4_choose_1_4_case: 广东11选5胆拖玩法，任选四玩法，1个胆码，4个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.7')" >
+        通过</a></span>
+
+    <div id='div_pt1.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.7: 没有弹窗
+距离第18020208期截止：
+00:02
+[1]
+[2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+[6, 2, 3, 7]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option4_choose_2_3_case: 广东11选5胆拖玩法，任选四玩法，3个胆码，2个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.8')" >
+        通过</a></span>
+
+    <div id='div_pt1.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.8: 没有弹窗
+距离第18020209期截止：
+09:37
+[3, 5, 7]
+[1, 2, 4, 6, 8, 9, 10, 11]
+[11, 4]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.9' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option5_choose_1_5_case: 广东11选5胆拖玩法，任选五玩法，1个胆码，5个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.9')" >
+        通过</a></span>
+
+    <div id='div_pt1.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.9: 没有弹窗
+距离第18020209期截止：
+09:14
+[11]
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[9, 4, 10, 5, 7]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.10' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option5_choose_4_2_case: 广东11选5胆拖玩法，任选五玩法，4个胆码，2个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.10')" >
+        通过</a></span>
+
+    <div id='div_pt1.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.10: 没有弹窗
+距离第18020209期截止：
+08:48
+[8, 1, 4, 10]
+[2, 3, 5, 6, 7, 9, 11]
+[3, 2]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.11' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option6_choose_1_6_case: 广东11选5胆拖玩法，任选六玩法，1个胆码，6个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.11')" >
+        通过</a></span>
+
+    <div id='div_pt1.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.11: 没有弹窗
+距离第18020209期截止：
+08:23
+[3]
+[1, 2, 4, 5, 6, 7, 8, 9, 10, 11]
+[1, 9, 6, 5, 2, 10]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.12' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option6_choose_5_2_case: 广东11选5胆拖玩法，任选六玩法，5个胆码，2个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.12')" >
+        通过</a></span>
+
+    <div id='div_pt1.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.12: 没有弹窗
+距离第18020209期截止：
+07:56
+[9, 2, 10, 5, 1]
+[3, 4, 6, 7, 8, 11]
+[4, 8]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.13' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option7_choose_1_7_case: 广东11选5胆拖玩法，任选七玩法，1个胆码，7个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.13')" >
+        通过</a></span>
+
+    <div id='div_pt1.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.13: 没有弹窗
+距离第18020209期截止：
+07:27
+[2]
+[1, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+[7, 6, 1, 8, 4, 11, 9]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.14' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option7_choose_6_2_case: 广东11选5胆拖玩法，任选七玩法，6个胆码，2个拖码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.14')" >
+        通过</a></span>
+
+    <div id='div_pt1.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.14: 没有弹窗
+距离第18020209期截止：
+07:00
+[8, 1, 9, 3, 5, 2]
+[4, 6, 7, 10, 11]
+[4, 7]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.15' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_optiops2_intelligent_chase_case: 胆拖投注，进入智能追号页面，默认追期，提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.15')" >
+        通过</a></span>
+
+    <div id='div_pt1.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.15: 没有弹窗
+没有弹窗
+距离第18020209期截止：
+06:31
+[3]
+[1, 2, 4, 5, 6, 7, 8, 9, 10, 11]
+[7, 6]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.16' class='hiddenRow'>
+    <td ><div class='testcase'>test_orderdetails_continue_scheme_case: 胆拖投注提交订单之后，查看订单详情，点击继续购买该方案，提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.16')" >
+        通过</a></span>
+
+    <div id='div_pt1.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.16: 没有弹窗
+没有弹窗
+[6]
+[1, 2, 3, 4, 5, 7, 8, 9, 10, 11]
+[11, 2]
+没有弹窗
+投注页的号码是：[06]02 11
+['06 02 11']
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr class='passClass'>
+    <td>GuangDong11choose5.test_gd11x5_Hand_case.GDEleChooseFiveHandCase: 广东11选5手选测试流程</td>
+    <td>47</td>
+    <td>47</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c2',47)">详情</a></td>
+</tr>
+
+<tr id='pt2.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_Investment_risk_case: 投注确认页面，点击购彩风险，能够打开和关闭</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.1')" >
+        通过</a></span>
+
+    <div id='div_pt2.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.1: 没有弹窗
+投注页的号码是：02 05
+['02 05']
+没有弹窗
+读取订单详情页的号码[&lt;selenium.webdriver.remote.webelement.WebElement (session="f0930f90e2b039608d728bc060ac754d", element="0.399009429498955-1")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="f0930f90e2b039608d728bc060ac754d", element="0.399009429498955-2")&gt;]
+['02 05']
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_User_agreement_case: 投注确认页面，点击用户协议，能够打开和关闭</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.2')" >
+        通过</a></span>
+
+    <div id='div_pt2.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.2: 没有弹窗
+投注页的号码是：05 09
+['05 09']
+没有弹窗
+读取订单详情页的号码[&lt;selenium.webdriver.remote.webelement.WebElement (session="d32a8cd74bcaaa1fb9ff6578cf8ff769", element="0.8963495474688561-1")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="d32a8cd74bcaaa1fb9ff6578cf8ff769", element="0.8963495474688561-2")&gt;]
+['05 09']
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_delete_num_case: 验证选号页的清除按钮，测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.3')" >
+        通过</a></span>
+
+    <div id='div_pt2.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.3: 没有弹窗
+距离第18020209期截止：
+04:20
+清除选号成功
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_double_cancel_case: 验证点击两次号码取消选号，流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.4')" >
+        通过</a></span>
+
+    <div id='div_pt2.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.4: 没有弹窗
+距离第18020209期截止：
+03:55
+双击取消选号成功
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_intelligently_chase_ravise_chase_add_confirm_revise_case: 【修改方案】点击连续追+按钮，点击【确定】，【提交】，提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.5')" >
+        通过</a></span>
+
+    <div id='div_pt2.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.5: 没有弹窗
+没有弹窗
+没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_intelligently_chase_ravise_chase_input12_cancel_revise_case: 【修改方案】输入连续追号12期，点击【取消】，【提交】提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.6')" >
+        通过</a></span>
+
+    <div id='div_pt2.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.6: 没有弹窗
+没有弹窗
+没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_intelligently_chase_ravise_chase_input12_confirm_revise_case: 【修改方案】输入连续追号12期，点击【确定】，【提交】提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.7')" >
+        通过</a></span>
+
+    <div id='div_pt2.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.7: 没有弹窗
+没有弹窗
+没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_intelligently_chase_ravise_chase_input12_times_input3_confirm_revise_case: 【修改方案】输入连续追12期，起始倍数，输入3倍，点击【确定】，【提交】提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.8')" >
+        通过</a></span>
+
+    <div id='div_pt2.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.8: 没有弹窗
+没有弹窗
+没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.9' class='hiddenRow'>
+    <td ><div class='testcase'>test_intelligently_chase_ravise_chase_sub_confirm_revise_case: 【修改方案】点击连续追-按钮，点击【确定】，【提交】，提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.9')" >
+        通过</a></span>
+
+    <div id='div_pt2.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.9: 没有弹窗
+没有弹窗
+没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.10' class='hiddenRow'>
+    <td ><div class='testcase'>test_intelligently_chase_ravise_times_add_confirm_revise_case: 【修改方案】起始倍数，点击+，点击【确定】，【提交】提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.10')" >
+        通过</a></span>
+
+    <div id='div_pt2.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.10: 没有弹窗
+没有弹窗
+没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.11' class='hiddenRow'>
+    <td ><div class='testcase'>test_intelligently_chase_ravise_times_input12_confirm_revise_case: 【修改方案】起始倍数，输入3倍，点击【确定】，【提交】提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.11')" >
+        通过</a></span>
+
+    <div id='div_pt2.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.11: 没有弹窗
+没有弹窗
+没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.12' class='hiddenRow'>
+    <td ><div class='testcase'>test_intelligently_chase_ravise_times_sub_confirm_revise_case: 【修改方案】起始倍数，点击-，点击【确定】，【提交】提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.12')" >
+        通过</a></span>
+
+    <div id='div_pt2.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.12: 没有弹窗
+没有弹窗
+没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.13' class='hiddenRow'>
+    <td ><div class='testcase'>test_intelligently_input_periods_case: 进入智能追号页面，输入追11期，点击【提交】提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.13')" >
+        通过</a></span>
+
+    <div id='div_pt2.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.13: 没有弹窗
+没有弹窗
+没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.14' class='hiddenRow'>
+    <td ><div class='testcase'>test_many_lottery_many_times_case: 复式多注，进入智能追号页面，默认追期，提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.14')" >
+        通过</a></span>
+
+    <div id='div_pt2.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.14: 没有弹窗
+没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.15' class='hiddenRow'>
+    <td ><div class='testcase'>test_mix_lottery_case: 多注（复式、单式组合）选号，提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.15')" >
+        通过</a></span>
+
+    <div id='div_pt2.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.15: 没有弹窗
+距离第18020210期截止：
+07:47
+没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.16' class='hiddenRow'>
+    <td ><div class='testcase'>test_option11_hand_choose2_case: 广东11选5，前二组选玩法，任选两个号码流程测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.16')" >
+        通过</a></span>
+
+    <div id='div_pt2.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.16: 没有弹窗
+距离第18020210期截止：
+07:15
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.17' class='hiddenRow'>
+    <td ><div class='testcase'>test_option12_hand_choose11_11_11_case: 广东11选5，前三直选玩法，前三位各选11号码测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.17')" >
+        通过</a></span>
+
+    <div id='div_pt2.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.17: 没有弹窗
+距离第18020210期截止：
+06:53
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.18' class='hiddenRow'>
+    <td ><div class='testcase'>test_option12_hand_choose1_1_1_case: 广东11选5，前三直选玩法，前三位各选一个号码测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.18')" >
+        通过</a></span>
+
+    <div id='div_pt2.18' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.18').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.18: 没有弹窗
+距离第18020210期截止：
+06:20
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.19' class='hiddenRow'>
+    <td ><div class='testcase'>test_option13_hand_choose3_case: 广东11选5，前三组选玩法，任选3号码测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.19')" >
+        通过</a></span>
+
+    <div id='div_pt2.19' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.19').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.19: 没有弹窗
+距离第18020210期截止：
+05:58
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.20' class='hiddenRow'>
+    <td ><div class='testcase'>test_option14_hand_choose1_1_1_case: 广东11选5，乐选三玩法，前三位各选1个号码测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.20')" >
+        通过</a></span>
+
+    <div id='div_pt2.20' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.20').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.20: 没有弹窗
+距离第18020210期截止：
+05:39
+[11]
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+[2]
+[1, 3, 4, 5, 6, 7, 8, 9, 10]
+[7]
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.21' class='hiddenRow'>
+    <td ><div class='testcase'>test_option15_hand_choose3_case: 广东11选5，乐选四玩法，任选4号码测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.21')" >
+        通过</a></span>
+
+    <div id='div_pt2.21' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.21').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.21: 没有弹窗
+距离第18020210期截止：
+05:16
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.22' class='hiddenRow'>
+    <td ><div class='testcase'>test_option16_hand_choose3_case: 广东11选5，乐选五玩法，任选5号码测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.22')" >
+        通过</a></span>
+
+    <div id='div_pt2.22' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.22').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.22: 没有弹窗
+距离第18020210期截止：
+04:54
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.23' class='hiddenRow'>
+    <td ><div class='testcase'>test_option2_many_lottery_case: 手动选号，单式，多注一倍，提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.23')" >
+        通过</a></span>
+
+    <div id='div_pt2.23' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.23').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.23: 没有弹窗
+距离第18020210期截止：
+04:33
+没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.24' class='hiddenRow'>
+    <td ><div class='testcase'>test_options10_hand_choose11_11_case: 广东11选5，前二直选玩法，前两位各选11个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.24')" >
+        通过</a></span>
+
+    <div id='div_pt2.24' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.24').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.24: 没有弹窗
+距离第18020210期截止：
+03:59
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.25' class='hiddenRow'>
+    <td ><div class='testcase'>test_options10_hand_choose1_1_case: 广东11选5，前二直选玩法，前两位各选1个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.25')" >
+        通过</a></span>
+
+    <div id='div_pt2.25' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.25').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.25: 没有弹窗
+距离第18020210期截止：
+03:34
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.26' class='hiddenRow'>
+    <td ><div class='testcase'>test_options2_hand_choose11_case: 广东11选5，任选二玩法，手选11个号流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.26')" >
+        通过</a></span>
+
+    <div id='div_pt2.26' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.26').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.26: 没有弹窗
+距离第18020210期截止：
+03:13
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.27' class='hiddenRow'>
+    <td ><div class='testcase'>test_options2_hand_choose2_case: 广东11选5，任选二玩法，手选两个号流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.27')" >
+        通过</a></span>
+
+    <div id='div_pt2.27' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.27').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.27: 没有弹窗
+距离第18020210期截止：
+02:48
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.28' class='hiddenRow'>
+    <td ><div class='testcase'>test_options2_hand_choose3_case: 广东11选5，任选二玩法，手选三个号流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.28')" >
+        通过</a></span>
+
+    <div id='div_pt2.28' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.28').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.28: 没有弹窗
+距离第18020210期截止：
+02:27
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.29' class='hiddenRow'>
+    <td ><div class='testcase'>test_options3_hand_choose11_case: 广东11选5，任选三玩法，手选11个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.29')" >
+        通过</a></span>
+
+    <div id='div_pt2.29' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.29').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.29: 没有弹窗
+距离第18020210期截止：
+02:05
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.30' class='hiddenRow'>
+    <td ><div class='testcase'>test_options3_hand_choose3_case: 广东11选5，任选三玩法，手选三个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.30')" >
+        通过</a></span>
+
+    <div id='div_pt2.30' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.30').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.30: 没有弹窗
+距离第18020210期截止：
+01:40
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.31' class='hiddenRow'>
+    <td ><div class='testcase'>test_options4_hand_choose11_case: 广东11选5，任选四玩法，手选11个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.31')" >
+        通过</a></span>
+
+    <div id='div_pt2.31' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.31').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.31: 没有弹窗
+距离第18020210期截止：
+01:16
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.32' class='hiddenRow'>
+    <td ><div class='testcase'>test_options4_hand_choose4_case: 广东11选5，任选四玩法，手选4个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.32')" >
+        通过</a></span>
+
+    <div id='div_pt2.32' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.32').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.32: 没有弹窗
+距离第18020210期截止：
+00:55
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.33' class='hiddenRow'>
+    <td ><div class='testcase'>test_options5_hand_choose11_case: 广东11选5，任选五玩法，手选11个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.33')" >
+        通过</a></span>
+
+    <div id='div_pt2.33' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.33').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.33: 没有弹窗
+距离第18020210期截止：
+00:34
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.34' class='hiddenRow'>
+    <td ><div class='testcase'>test_options5_hand_choose5_case: 广东11选5，任选五玩法，手选5个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.34')" >
+        通过</a></span>
+
+    <div id='div_pt2.34' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.34').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.34: 没有弹窗
+距离第18020210期截止：
+00:10
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.35' class='hiddenRow'>
+    <td ><div class='testcase'>test_options6_hand_choose11_case: 广东11选5，任选六玩法，手选11个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.35')" >
+        通过</a></span>
+
+    <div id='div_pt2.35' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.35').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.35: 没有弹窗
+距离第18020211期截止：
+09:51
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.36' class='hiddenRow'>
+    <td ><div class='testcase'>test_options6_hand_choose6_case: 广东11选5，任选六玩法，手选6个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.36')" >
+        通过</a></span>
+
+    <div id='div_pt2.36' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.36').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.36: 没有弹窗
+距离第18020211期截止：
+09:28
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.37' class='hiddenRow'>
+    <td ><div class='testcase'>test_options7_hand_choose11_case: 广东11选5，任选七玩法，手选11个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.37')" >
+        通过</a></span>
+
+    <div id='div_pt2.37' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.37').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.37: 没有弹窗
+距离第18020211期截止：
+09:06
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.38' class='hiddenRow'>
+    <td ><div class='testcase'>test_options7_hand_choose7_case: 广东11选5，任选七玩法，手选7个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.38')" >
+        通过</a></span>
+
+    <div id='div_pt2.38' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.38').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.38: 没有弹窗
+距离第18020211期截止：
+08:44
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.39' class='hiddenRow'>
+    <td ><div class='testcase'>test_options8_hand_choose11_case: 广东11选5，任选八玩法，手选11个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.39')" >
+        通过</a></span>
+
+    <div id='div_pt2.39' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.39').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.39: 没有弹窗
+距离第18020211期截止：
+08:23
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.40' class='hiddenRow'>
+    <td ><div class='testcase'>test_options8_hand_choose8_case: 广东11选5，任选八玩法，手选8个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.40')" >
+        通过</a></span>
+
+    <div id='div_pt2.40' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.40').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.40: 没有弹窗
+距离第18020211期截止：
+08:00
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.41' class='hiddenRow'>
+    <td ><div class='testcase'>test_options9_hand_choose1_case: 广东11选5，前一玩法，手选1个号码流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.41')" >
+        通过</a></span>
+
+    <div id='div_pt2.41' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.41').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.41: 没有弹窗
+距离第18020211期截止：
+07:34
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.42' class='hiddenRow'>
+    <td ><div class='testcase'>test_orderdetails_page_continue_buy_case: 订单详情页面，点击继续购买该方案，可以跳转到选号确认页面，提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.42')" >
+        通过</a></span>
+
+    <div id='div_pt2.42' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.42').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.42: 没有弹窗
+没有弹窗
+没有弹窗
+投注页的号码是：03 06 09
+['03 06 09']
+没有弹窗
+读取订单详情页的号码[&lt;selenium.webdriver.remote.webelement.WebElement (session="df10f958163ffd5bdc2af0d9856f77c5", element="0.6519789150714921-1")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="df10f958163ffd5bdc2af0d9856f77c5", element="0.6519789150714921-2")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="df10f958163ffd5bdc2af0d9856f77c5", element="0.6519789150714921-3")&gt;]
+['03 06 09']
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.43' class='hiddenRow'>
+    <td ><div class='testcase'>test_play_instruction_case: 在投注选号页面，点击右上角玩法说明，可以打开和关闭</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.43')" >
+        通过</a></span>
+
+    <div id='div_pt2.43' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.43').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.43: 没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.44' class='hiddenRow'>
+    <td ><div class='testcase'>test_recommendation_case: 选号页面，点击右上方隐藏的“历史走势”按钮，点击使用推荐号码，提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.44')" >
+        通过</a></span>
+
+    <div id='div_pt2.44' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.44').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.44: 没有弹窗
+投注页的号码是：06 08
+['06 08']
+没有弹窗
+读取订单详情页的号码[&lt;selenium.webdriver.remote.webelement.WebElement (session="3cb5e0b05b4871f1245af04d35b3dec2", element="0.6879366434289338-1")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="3cb5e0b05b4871f1245af04d35b3dec2", element="0.6879366434289338-2")&gt;]
+['06 08']
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.45' class='hiddenRow'>
+    <td ><div class='testcase'>test_recommendation_many_lottery_many_times_case: 选号页面，点开历史开奖，使用推荐号码投注（多注多倍），提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.45')" >
+        通过</a></span>
+
+    <div id='div_pt2.45' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.45').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.45: 没有弹窗
+投注页的号码是：02 03 04 06
+['02 03 04 06']
+没有弹窗
+读取订单详情页的号码[&lt;selenium.webdriver.remote.webelement.WebElement (session="88b8372284dee0979c05340ad468f9b2", element="0.03979027420177239-1")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="88b8372284dee0979c05340ad468f9b2", element="0.03979027420177239-2")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="88b8372284dee0979c05340ad468f9b2", element="0.03979027420177239-3")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="88b8372284dee0979c05340ad468f9b2", element="0.03979027420177239-4")&gt;]
+['02 03 04 06']
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.46' class='hiddenRow'>
+    <td ><div class='testcase'>test_recommendation_one_lottery_one_times_case: 选号页面，点开历史开奖，使用推荐号码投注（一注一倍），提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.46')" >
+        通过</a></span>
+
+    <div id='div_pt2.46' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.46').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.46: 没有弹窗
+投注页的号码是：04 06 08 10
+['04 06 08 10']
+没有弹窗
+读取订单详情页的号码[&lt;selenium.webdriver.remote.webelement.WebElement (session="5aa1f59a999cf1a42a7a0936093f6252", element="0.7855705265922395-1")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="5aa1f59a999cf1a42a7a0936093f6252", element="0.7855705265922395-2")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="5aa1f59a999cf1a42a7a0936093f6252", element="0.7855705265922395-3")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="5aa1f59a999cf1a42a7a0936093f6252", element="0.7855705265922395-4")&gt;]
+['04 06 08 10']
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.47' class='hiddenRow'>
+    <td ><div class='testcase'>test_success_page_continue_buy_case: 订单提交成功页面，点击继续投注该彩种，能够跳转到彩种选号页面</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.47')" >
+        通过</a></span>
+
+    <div id='div_pt2.47' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.47').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.47: 没有弹窗
+没有弹窗
+没有弹窗
+投注页的号码是：02 04 05
+['02 04 05']
+没有弹窗
+读取订单详情页的号码[&lt;selenium.webdriver.remote.webelement.WebElement (session="8a11142a00e3eb50b5dbeea3bc1d931a", element="0.5280660228809748-1")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="8a11142a00e3eb50b5dbeea3bc1d931a", element="0.5280660228809748-2")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="8a11142a00e3eb50b5dbeea3bc1d931a", element="0.5280660228809748-3")&gt;]
+['02 04 05']
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr class='errorClass'>
+    <td>GuangDong11choose5.test_gd11x5_machine_case.GDElevenChooseFiveCase: 广东11选5机选流程测试</td>
+    <td>21</td>
+    <td>12</td>
+    <td>0</td>
+    <td>9</td>
+    <td><a href="javascript:showClassDetail('c3',21)">详情</a></td>
+</tr>
+
+<tr id='pt3.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_machine_choose_continue_button_case: 投注确认页“继续选号”按钮测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.1')" >
+        通过</a></span>
+
+    <div id='div_pt3.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.1: 没有弹窗
+距离第18020211期截止：
+04:13
+没有弹窗
+没有弹窗
+投注金额：4元
+订单状态：待出票
+投注号码：11(前一)
+11(前一)
+开奖时间：02-02 10:52
+订单编号：2484337
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_machine_choose_five_button_case: 投注确认页“机选五注”按钮测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.2')" >
+        通过</a></span>
+
+    <div id='div_pt3.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.2: 没有弹窗
+距离第18020211期截止：
+03:32
+没有弹窗
+没有弹窗
+投注金额：12元
+订单状态：待出票
+投注号码：09(前一)
+02(前一)
+02(前一)
+07(前一)
+10(前一)
+11(前一)
+隐藏更多
+开奖时间：02-02 10:52
+订单编号：2484338
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_machine_choose_five_case: 机选5注流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.3')" >
+        通过</a></span>
+
+    <div id='div_pt3.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.3: 没有弹窗
+距离第18020211期截止：
+03:01
+没有弹窗
+没有弹窗
+投注金额：10元
+订单状态：待出票
+投注号码：04(前一)
+10(前一)
+10(前一)
+11(前一)
+04(前一)
+开奖时间：02-02 10:52
+订单编号：2484348
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_machine_choose_one_case: 机选一注流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.4')" >
+        通过</a></span>
+
+    <div id='div_pt3.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.4: 没有弹窗
+距离第18020211期截止：
+02:30
+没有弹窗
+没有弹窗
+投注金额：2元
+订单状态：待出票
+投注号码：09(前一)
+开奖时间：02-02 10:52
+订单编号：2484349
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft3.5' class='none'>
+    <td ><div class='testcase'>test_machine_choose_one_chase10_case: 机选一注追10期流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft3.5')" >
+        错误</a></span>
+
+    <div id='div_ft3.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft3.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft3.5: 没有弹窗
+距离第18020211期截止：
+01:55
+追期按钮缺失
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Leyou\GuangDong11choose5\test_gd11x5_machine_case.py", line 272, in test_machine_choose_one_chase10_case
+    cl.chase_ticket_button_ten()#点击追10期
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 560, in chase_ticket_button_ten
+    self.find_element(*self.chase_ticket_button_ten_loc).click()#点击追10期
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py", line 78, in click
+    self._execute(Command.CLICK_ELEMENT)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py", line 499, in _execute
+    return self._parent.execute(command, params)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 297, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 194, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.ElementNotVisibleException: Message: element not visible
+  (Session info: chrome=60.0.3112.78)
+  (Driver info: chromedriver=2.32.498550 (9dec58e66c31bcc53a9ce3c7226f0c1c5810906a),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft3.6' class='none'>
+    <td ><div class='testcase'>test_machine_choose_one_chase20_case: 机选一注追20期流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft3.6')" >
+        错误</a></span>
+
+    <div id='div_ft3.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft3.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft3.6: 没有弹窗
+距离第18020211期截止：
+01:35
+追期按钮缺失
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Leyou\GuangDong11choose5\test_gd11x5_machine_case.py", line 307, in test_machine_choose_one_chase20_case
+    cl.chase_ticket_button_twenty()#点击追20期
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 567, in chase_ticket_button_twenty
+    self.find_element(*self.chase_ticket_button_twenty_loc).click()  # 点击追20期
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py", line 78, in click
+    self._execute(Command.CLICK_ELEMENT)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py", line 499, in _execute
+    return self._parent.execute(command, params)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 297, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 194, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.ElementNotVisibleException: Message: element not visible
+  (Session info: chrome=60.0.3112.78)
+  (Driver info: chromedriver=2.32.498550 (9dec58e66c31bcc53a9ce3c7226f0c1c5810906a),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft3.7' class='none'>
+    <td ><div class='testcase'>test_machine_choose_one_chase2_case: 机选一注追2期流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft3.7')" >
+        错误</a></span>
+
+    <div id='div_ft3.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft3.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft3.7: 没有弹窗
+距离第18020211期截止：
+01:09
+追期按钮缺失
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Leyou\GuangDong11choose5\test_gd11x5_machine_case.py", line 201, in test_machine_choose_one_chase2_case
+    cl.chase_ticket_button_two()#点击追两期
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 546, in chase_ticket_button_two
+    self.find_element(*self.chase_ticket_button_two_loc).click()#点击追2期
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py", line 78, in click
+    self._execute(Command.CLICK_ELEMENT)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py", line 499, in _execute
+    return self._parent.execute(command, params)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 297, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 194, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.ElementNotVisibleException: Message: element not visible
+  (Session info: chrome=60.0.3112.78)
+  (Driver info: chromedriver=2.32.498550 (9dec58e66c31bcc53a9ce3c7226f0c1c5810906a),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft3.8' class='none'>
+    <td ><div class='testcase'>test_machine_choose_one_chase50_case: 机选一注追50期流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft3.8')" >
+        错误</a></span>
+
+    <div id='div_ft3.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft3.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft3.8: 没有弹窗
+距离第18020211期截止：
+00:45
+追期按钮缺失
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Leyou\GuangDong11choose5\test_gd11x5_machine_case.py", line 342, in test_machine_choose_one_chase50_case
+    cl.chase_ticket_button_fifty()#点击追50期
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 574, in chase_ticket_button_fifty
+    self.find_element(*self.chase_ticket_button_fifty_loc).click()  # 点击追50期
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py", line 78, in click
+    self._execute(Command.CLICK_ELEMENT)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py", line 499, in _execute
+    return self._parent.execute(command, params)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 297, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 194, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.ElementNotVisibleException: Message: element not visible
+  (Session info: chrome=60.0.3112.78)
+  (Driver info: chromedriver=2.32.498550 (9dec58e66c31bcc53a9ce3c7226f0c1c5810906a),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft3.9' class='none'>
+    <td ><div class='testcase'>test_machine_choose_one_chase5_case: 机选一注追5期流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft3.9')" >
+        错误</a></span>
+
+    <div id='div_ft3.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft3.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft3.9: 没有弹窗
+距离第18020211期截止：
+00:25
+追期按钮缺失
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Leyou\GuangDong11choose5\test_gd11x5_machine_case.py", line 236, in test_machine_choose_one_chase5_case
+    cl.chase_ticket_button_five()#点击追5期
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 553, in chase_ticket_button_five
+    self.find_element(*self.chase_ticket_button_five_loc).click()#点击追5期
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py", line 78, in click
+    self._execute(Command.CLICK_ELEMENT)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py", line 499, in _execute
+    return self._parent.execute(command, params)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py", line 297, in execute
+    self.error_handler.check_response(response)
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 194, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.ElementNotVisibleException: Message: element not visible
+  (Session info: chrome=60.0.3112.78)
+  (Driver info: chromedriver=2.32.498550 (9dec58e66c31bcc53a9ce3c7226f0c1c5810906a),platform=Windows NT 6.1.7601 SP1 x86_64)
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft3.10' class='none'>
+    <td ><div class='testcase'>test_machine_choose_one_delete_all_cancel_case: 机选一注，投注确认页点击删除所有选号按钮并取消删除流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft3.10')" >
+        错误</a></span>
+
+    <div id='div_ft3.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft3.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft3.10: 没有弹窗
+距离第18020211期截止：
+00:04
+没有弹窗
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Leyou\GuangDong11choose5\test_gd11x5_machine_case.py", line 635, in test_machine_choose_one_delete_all_cancel_case
+    text = sos.submit_order_success()  # 获取页面“订单提交成功”文本
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\submit_order_sucess.py", line 67, in submit_order_success
+    self.wait_element_located(self.driver,self.submit_order_success_text_loc)
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 79, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.11' class='hiddenRow'>
+    <td ><div class='testcase'>test_machine_choose_one_delete_all_case: 机选一注，投注确认页点击删除所有选号并确认按钮流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.11')" >
+        通过</a></span>
+
+    <div id='div_pt3.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.11: 没有弹窗
+距离第18020212期截止：
+09:17
+没有弹窗
+没有弹窗
+投注金额：2元
+订单状态：待出票
+投注号码：07(前一)
+开奖时间：02-02 11:02
+订单编号：2484350
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.12' class='hiddenRow'>
+    <td ><div class='testcase'>test_machine_choose_one_delete_one_case: 机选一注，投注确认页点击单个删除选号按钮流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.12')" >
+        通过</a></span>
+
+    <div id='div_pt3.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.12: 没有弹窗
+距离第18020212期截止：
+08:49
+没有弹窗
+没有弹窗
+投注金额：2元
+订单状态：待出票
+投注号码：05(前一)
+开奖时间：02-02 11:02
+订单编号：2484351
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft3.13' class='none'>
+    <td ><div class='testcase'>test_machine_choose_one_input_chase3_add_case: 机选一注输入追3期，点击投注倍数的+按钮流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft3.13')" >
+        错误</a></span>
+
+    <div id='div_ft3.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft3.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft3.13: 没有弹窗
+距离第18020212期截止：
+08:17
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Leyou\GuangDong11choose5\test_gd11x5_machine_case.py", line 445, in test_machine_choose_one_input_chase3_add_case
+    ecfcl.chase_ticket_input("3")#输入追3期
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\EleChooseFive\EleChooseFive_confirm_lottery.py", line 221, in chase_ticket_input
+    self.wait_element_located(self.driver,self.chase_ticket_button_loc)
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 79, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft3.14' class='none'>
+    <td ><div class='testcase'>test_machine_choose_one_input_chase3_case: 机选一注输入追3期流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft3.14')" >
+        错误</a></span>
+
+    <div id='div_ft3.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft3.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft3.14: 没有弹窗
+距离第18020212期截止：
+07:38
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Leyou\GuangDong11choose5\test_gd11x5_machine_case.py", line 376, in test_machine_choose_one_input_chase3_case
+    ecfcl.chase_ticket_input("3")#输入追3期
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\EleChooseFive\EleChooseFive_confirm_lottery.py", line 221, in chase_ticket_input
+    self.wait_element_located(self.driver,self.chase_ticket_button_loc)
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 79, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft3.15' class='none'>
+    <td ><div class='testcase'>test_machine_choose_one_input_chase3_sub_case: 机选一注输入追3期，点击投注倍数的-按钮流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft3.15')" >
+        错误</a></span>
+
+    <div id='div_ft3.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft3.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft3.15: 没有弹窗
+距离第18020212期截止：
+06:56
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Leyou\GuangDong11choose5\test_gd11x5_machine_case.py", line 410, in test_machine_choose_one_input_chase3_sub_case
+    ecfcl.chase_ticket_input("3")#输入追3期
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\EleChooseFive\EleChooseFive_confirm_lottery.py", line 221, in chase_ticket_input
+    self.wait_element_located(self.driver,self.chase_ticket_button_loc)
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 79, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.16' class='hiddenRow'>
+    <td ><div class='testcase'>test_machine_choose_one_throw_add_case: 机选一注输入投3倍，点击投注倍数的+按钮流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.16')" >
+        通过</a></span>
+
+    <div id='div_pt3.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.16: 没有弹窗
+距离第18020212期截止：
+06:15
+没有弹窗
+没有弹窗
+投注金额：8元
+订单状态：待出票
+投注号码：02(前一)
+开奖时间：02-02 11:02
+订单编号：2484352
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.17' class='hiddenRow'>
+    <td ><div class='testcase'>test_machine_choose_one_throw_input_case: 机选一注输入投3倍流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.17')" >
+        通过</a></span>
+
+    <div id='div_pt3.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.17: 没有弹窗
+距离第18020212期截止：
+05:43
+没有弹窗
+没有弹窗
+投注金额：6元
+订单状态：待出票
+投注号码：07(前一)
+开奖时间：02-02 11:02
+订单编号：2484353
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.18' class='hiddenRow'>
+    <td ><div class='testcase'>test_machine_choose_one_throw_sub_case: 机选一注输入投3倍,点击-流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.18')" >
+        通过</a></span>
+
+    <div id='div_pt3.18' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.18').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.18: 没有弹窗
+距离第18020212期截止：
+05:03
+没有弹窗
+没有弹窗
+投注金额：4元
+订单状态：待出票
+投注号码：09(前一)
+开奖时间：02-02 11:02
+订单编号：2484354
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.19' class='hiddenRow'>
+    <td ><div class='testcase'>test_machine_choose_ten_case: 机选10注流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.19')" >
+        通过</a></span>
+
+    <div id='div_pt3.19' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.19').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.19: 没有弹窗
+距离第18020212期截止：
+04:32
+没有弹窗
+没有弹窗
+投注金额：20元
+订单状态：待出票
+投注号码：06(前一)
+08(前一)
+06(前一)
+01(前一)
+10(前一)
+08(前一)
+04(前一)
+05(前一)
+01(前一)
+03(前一)
+隐藏更多
+开奖时间：02-02 11:02
+订单编号：2484355
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.20' class='hiddenRow'>
+    <td ><div class='testcase'>test_machine_choose_ten_delete_all_cancel_case: 机选10注，投注确认页点击删除选号按钮并取消删除流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.20')" >
+        通过</a></span>
+
+    <div id='div_pt3.20' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.20').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.20: 没有弹窗
+距离第18020212期截止：
+03:58
+没有弹窗
+没有弹窗
+投注金额：20元
+订单状态：待出票
+投注号码：05(前一)
+04(前一)
+05(前一)
+10(前一)
+01(前一)
+04(前一)
+09(前一)
+08(前一)
+11(前一)
+03(前一)
+隐藏更多
+开奖时间：02-02 11:02
+订单编号：2484356
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt3.21' class='hiddenRow'>
+    <td ><div class='testcase'>test_use_recommand_num_case: 使用推荐号码测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt3.21')" >
+        通过</a></span>
+
+    <div id='div_pt3.21' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt3.21').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt3.21: 没有弹窗
+距离第18020212期截止：
+03:26
+没有弹窗
+没有弹窗
+投注金额：2元
+订单状态：待出票
+投注号码：07(前一)
+开奖时间：02-02 11:02
+订单编号：2484357
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr class='passClass'>
+    <td>GuangDong11choose5.test_gd11x5_toast_case.GD11x5ToastCase</td>
+    <td>11</td>
+    <td>11</td>
+    <td>0</td>
+    <td>0</td>
+    <td><a href="javascript:showClassDetail('c4',11)">详情</a></td>
+</tr>
+
+<tr id='pt4.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_front2_choose_out_case: 广东11选5胆拖玩法，前二组选玩法，2个胆码，提示“胆码个数超过限制”流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.1')" >
+        通过</a></span>
+
+    <div id='div_pt4.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.1: 没有弹窗
+距离第18020212期截止：
+02:52
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt4.2' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_front3_choose_out_case: 广东11选5胆拖玩法，前三组选玩法，3个胆码，提示“胆码个数超过限制”流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.2')" >
+        通过</a></span>
+
+    <div id='div_pt4.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.2: 没有弹窗
+距离第18020212期截止：
+02:28
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt4.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option2_choose_out_case: 广东11选5胆拖玩法，任选二玩法，2个胆码，提示“胆码个数超过限制”流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.3')" >
+        通过</a></span>
+
+    <div id='div_pt4.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.3: 没有弹窗
+距离第18020212期截止：
+02:05
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt4.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option3_choose_out_case: 广东11选5胆拖玩法，任选三玩法，3个胆码，提示“胆码个数超过限制”流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.4')" >
+        通过</a></span>
+
+    <div id='div_pt4.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.4: 没有弹窗
+距离第18020212期截止：
+01:40
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt4.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option4_choose_out_case: 广东11选5胆拖玩法，任选四玩法，4个胆码，提示“胆码个数超过限制”流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.5')" >
+        通过</a></span>
+
+    <div id='div_pt4.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.5: 没有弹窗
+距离第18020212期截止：
+01:16
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt4.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option5_choose_out_case: 广东11选5胆拖玩法，任选五玩法，5个胆码，提示“胆码个数超过限制”流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.6')" >
+        通过</a></span>
+
+    <div id='div_pt4.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.6: 没有弹窗
+距离第18020212期截止：
+00:51
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt4.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option6_choose_out_case: 广东11选5胆拖玩法，任选六玩法，6个胆码，提示“胆码个数超过限制”流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.7')" >
+        通过</a></span>
+
+    <div id='div_pt4.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.7: 没有弹窗
+距离第18020212期截止：
+00:27
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt4.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_dantuo_option7_choose_out_case: 广东11选5胆拖玩法，任选七玩法，7个胆码，提示“胆码个数超过限制”流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.8')" >
+        通过</a></span>
+
+    <div id='div_pt4.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.8: 没有弹窗
+距离第18020212期截止：
+00:02
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt4.9' class='hiddenRow'>
+    <td ><div class='testcase'>test_option13_choose_out_case: 广东11选5普通玩法，乐选三玩法，每一位各选2个号码，提示“只支持单式投注”流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.9')" >
+        通过</a></span>
+
+    <div id='div_pt4.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.9: 没有弹窗
+距离第18020213期截止：
+09:38
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt4.10' class='hiddenRow'>
+    <td ><div class='testcase'>test_option14_choose_out_case: 广东11选5普通玩法，乐选四玩法，选取5个号码，提示“只支持单式投注”流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.10')" >
+        通过</a></span>
+
+    <div id='div_pt4.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.10: 没有弹窗
+距离第18020213期截止：
+09:12
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt4.11' class='hiddenRow'>
+    <td ><div class='testcase'>test_option15_choose_out_case: 广东11选5普通玩法，乐选五玩法，选取6个号码，提示“只支持单式投注”流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt4.11')" >
+        通过</a></span>
+
+    <div id='div_pt4.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt4.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt4.11: 没有弹窗
+距离第18020213期截止：
+08:50
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='total_row'>
+    <td>统计</td>
+    <td>95</td>
+    <td>86</td>
+    <td>0</td>
+    <td>9</td>
+    <td>&nbsp;</td>
+</tr>
+</table>
+<td>&nbsp;</td>
+<script>
+    drawCircle(86, 0, 9)
+</script>
+
+<div id='ending'>&nbsp;</div>
+
+</body>
+</html>

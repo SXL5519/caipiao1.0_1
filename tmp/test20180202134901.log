@@ -1,0 +1,14 @@
+Fri, 02 Feb 2018 13:49:01 function.py[line:16] DEBUG debug message
+Fri, 02 Feb 2018 13:49:01 function.py[line:17] INFO info message
+Fri, 02 Feb 2018 13:49:01 function.py[line:18] WARNING warning message
+Fri, 02 Feb 2018 13:49:01 function.py[line:19] ERROR error message
+Fri, 02 Feb 2018 13:49:01 function.py[line:20] CRITICAL critical message
+Fri, 02 Feb 2018 13:49:03 remote_connection.py[line:478] DEBUG POST http://127.0.0.1:52964/session {"capabilities": {"firstMatch": [{}], "alwaysMatch": {"browserName": "chrome"}}, "desiredCapabilities": {"browserName": "chrome", "version": "", "platform": "ANY", "chromeOptions": {"mobileEmulation": {"deviceName": "Galaxy S5"}, "excludeSwitches": ["ignore-certificate-errors"], "extensions": [], "args": []}}}
+Fri, 02 Feb 2018 13:49:05 remote_connection.py[line:565] DEBUG Finished Request
+Fri, 02 Feb 2018 13:49:05 remote_connection.py[line:478] DEBUG POST http://127.0.0.1:52964/session/2fdccecd3fb797344b8a53c83c12d3d5/window/current/size {"width": 500, "height": 800, "windowHandle": "current", "sessionId": "2fdccecd3fb797344b8a53c83c12d3d5"}
+Fri, 02 Feb 2018 13:49:06 remote_connection.py[line:565] DEBUG Finished Request
+Fri, 02 Feb 2018 13:49:06 remote_connection.py[line:478] DEBUG POST http://127.0.0.1:52964/session/2fdccecd3fb797344b8a53c83c12d3d5/url {"url": "http://mtest.lexuncp.com/", "sessionId": "2fdccecd3fb797344b8a53c83c12d3d5"}
+Fri, 02 Feb 2018 13:49:08 remote_connection.py[line:565] DEBUG Finished Request
+Fri, 02 Feb 2018 13:49:08 remote_connection.py[line:478] DEBUG POST http://127.0.0.1:52964/session/2fdccecd3fb797344b8a53c83c12d3d5/timeouts/implicit_wait {"ms": 2000.0, "sessionId": "2fdccecd3fb797344b8a53c83c12d3d5"}
+Fri, 02 Feb 2018 13:49:08 remote_connection.py[line:565] DEBUG Finished Request
+Fri, 02 Feb 2018 13:49:08 remote_connection.py[line:478] DEBUG POST http://127.0.0.1:52964/session/2fdccecd3fb797344b8a53c83c12d3d5/element {"using": "css selector", "value": ".i-plusdel.mi_ldialog_close", "sessionId": "2fdccecd3fb797344b8a53c83c12d3d5"}

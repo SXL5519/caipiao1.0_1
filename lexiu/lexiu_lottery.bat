@@ -1,0 +1,5 @@
+@echo off
+cd ..
+echo "???????"
+python run_lottery_lexiu.py
+exit

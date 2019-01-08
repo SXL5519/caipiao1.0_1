@@ -1,0 +1,5 @@
+@echo off
+cd ..
+echo "‘À––¿÷¬ÿæ∫≤ ¿∂«Ú2"
+python run_haobcA_lelun.py
+exit

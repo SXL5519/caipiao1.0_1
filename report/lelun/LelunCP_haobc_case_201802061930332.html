@@ -1,0 +1,2354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>乐仑竞彩蓝球——自动化测试报告2</title>
+    <meta name="generator" content="HTMLTestRunner 0.8.3"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    
+<style type="text/css" media="screen">
+body        { font-family: verdana, arial, helvetica, sans-serif; font-size: 80%; }
+table       { font-size: 100%; }
+pre         { }
+
+/* -- heading ---------------------------------------------------------------------- */
+h1 {
+	font-size: 16pt;
+	color: gray;
+}
+.heading {
+    margin-top: 0ex;
+    margin-bottom: 1ex;
+}
+
+.heading .attribute {
+    margin-top: 1ex;
+    margin-bottom: 0;
+}
+
+.heading .description {
+    margin-top: 4ex;
+    margin-bottom: 6ex;
+}
+
+/* -- css div popup ------------------------------------------------------------------------ */
+a.popup_link {
+}
+
+a.popup_link:hover {
+    color: red;
+}
+.img{
+	width: 100%;
+	height: 100%;
+	border-collapse: collapse;
+    border: 2px solid #777;
+}
+
+.screenshots {
+    z-index: 100;
+	position:absolute;
+	left: 23%;
+	top: 20%;
+	display: none;
+}
+.close_shots {
+	position:absolute;
+	top:0; left:98%;
+	z-index:99;
+	width:20px;
+}
+.popup_window {
+    display: none;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    /*border: solid #627173 1px; */
+    padding: 10px;
+    background-color: #E6E6D6;
+    font-family: "Lucida Console", "Courier New", Courier, monospace;
+    text-align: left;
+    font-size: 8pt;
+    width: 500px;
+}
+
+}
+/* -- report ------------------------------------------------------------------------ */
+#show_detail_line {
+    margin-top: 3ex;
+    margin-bottom: 1ex;
+}
+#result_table {
+    width: 80%;
+    border-collapse: collapse;
+    border: 1px solid #777;
+}
+#header_row {
+    font-weight: bold;
+    color: white;
+    background-color: #777;
+}
+#result_table td {
+    border: 1px solid #777;
+    padding: 2px;
+}
+#total_row  { font-weight: bold; }
+.passClass  { background-color: #6c6; }
+.failClass  { background-color: #c60; }
+.errorClass { background-color: #c00; }
+.passCase   { color: #6c6; }
+.failCase   { color: #c60; font-weight: bold; }
+.errorCase  { color: #c00; font-weight: bold; }
+.hiddenRow  { display: none; }
+.testcase   { margin-left: 2em; }
+
+
+/* -- ending ---------------------------------------------------------------------- */
+#ending {
+}
+
+
+.piechart{
+    position:absolute;  ;
+    top:20px;
+    left:300px;
+    width: 200px;
+    float: left;
+    display:  inline;
+}
+
+
+</style>
+
+</head>
+<body>
+<script language="javascript" type="text/javascript">
+output_list = Array();
+
+/* level - 0:Summary; 1:Failed; 2:All */
+function showCase(level) {
+    trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        tr = trs[i];
+        id = tr.id;
+        if (id.substr(0,2) == 'ft') {
+            if (level < 1) {
+                tr.className = 'hiddenRow';
+            }
+            else {
+                tr.className = '';
+            }
+        }
+        if (id.substr(0,2) == 'pt') {
+            if (level > 1) {
+                tr.className = '';
+            }
+            else {
+                tr.className = 'hiddenRow';
+            }
+        }
+    }
+}
+
+
+function showClassDetail(cid, count) {
+    var id_list = Array(count);
+    var toHide = 1;
+    for (var i = 0; i < count; i++) {
+        tid0 = 't' + cid.substr(1) + '.' + (i+1);
+        tid = 'f' + tid0;
+        tr = document.getElementById(tid);
+        if (!tr) {
+            tid = 'p' + tid0;
+            tr = document.getElementById(tid);
+        }
+        id_list[i] = tid;
+        if (tr.className) {
+            toHide = 0;
+        }
+    }
+    for (var i = 0; i < count; i++) {
+        tid = id_list[i];
+        if (toHide) {
+            document.getElementById('div_'+tid).style.display = 'none'
+            document.getElementById(tid).className = 'hiddenRow';
+        }
+        else {
+            document.getElementById(tid).className = '';
+        }
+    }
+}
+
+
+function showTestDetail(div_id){
+    var details_div = document.getElementById(div_id)
+    var displayState = details_div.style.display
+    // alert(displayState)
+    if (displayState != 'block' ) {
+        displayState = 'block'
+        details_div.style.display = 'block'
+    }
+    else {
+        details_div.style.display = 'none'
+    }
+}
+
+
+function html_escape(s) {
+    s = s.replace(/&/g,'&amp;');
+    s = s.replace(/</g,'&lt;');
+    s = s.replace(/>/g,'&gt;');
+    return s;
+}
+
+function drawCircle(pass, fail, error){
+    var color = ["#6c6","#c60","#c00"];
+    var data = [pass,fail,error];
+    var text_arr = ["pass", "fail", "error"];
+
+    var canvas = document.getElementById("circle");
+    var ctx = canvas.getContext("2d");
+    var startPoint=0;
+    var width = 20, height = 10;
+    var posX = 112 * 2 + 20, posY = 30;
+    var textX = posX + width + 5, textY = posY + 10;
+    for(var i=0;i<data.length;i++){
+        ctx.fillStyle = color[i];
+        ctx.beginPath();
+        ctx.moveTo(112,84);
+        ctx.arc(112,84,84,startPoint,startPoint+Math.PI*2*(data[i]/(data[0]+data[1]+data[2])),false);
+        ctx.fill();
+        startPoint += Math.PI*2*(data[i]/(data[0]+data[1]+data[2]));
+        ctx.fillStyle = color[i];
+        ctx.fillRect(posX, posY + 20 * i, width, height);
+        ctx.moveTo(posX, posY + 20 * i);
+        ctx.font = 'bold 14px';
+        ctx.fillStyle = color[i];
+        var percent = text_arr[i] + ":"+data[i];
+        ctx.fillText(percent, textX, textY + 20 * i);
+
+    }
+}
+
+function show_shots(obj) {
+	obj.nextElementSibling.style.display="block";
+
+}
+
+function close_shots(obj) {
+	obj.parentElement.style.display="none";
+}
+
+</script>
+<div class="piechart">
+    <div>
+        <canvas id="circle" width="350" height="168" </canvas>
+    </div>
+</div>
+<div class='heading'>
+<h1>乐仑竞彩蓝球——自动化测试报告2</h1>
+<p class='attribute'><strong>开始时间:</strong> 2018-02-06 19:30:33</p>
+<p class='attribute'><strong>耗时:</strong> 1:20:21.860000</p>
+<p class='attribute'><strong>状态:</strong> <span class="tj passCase">Pass</span>27 <span class="tj errorCase">Error</span>20</p>
+
+<p class='description'>运行环境：win7 Chrome</p>
+</div>
+
+
+
+<p id='show_detail_line'>显示
+<a href='javascript:showCase(0)'>概要</a>
+<a href='javascript:showCase(1)'>失败</a>
+<a href='javascript:showCase(2)'>所有</a>
+</p>
+
+<table id='result_table'>
+<colgroup>
+<col align='left' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+<col align='right' />
+</colgroup>
+<tr id='header_row'>
+    <td>测试组/测试用例</td>
+    <td>总数</td>
+    <td>通过</td>
+    <td>失败</td>
+    <td>错误</td>
+    <td>视图</td>
+</tr>
+
+<tr class='errorClass'>
+    <td>Haobc.test_Ahaobc_dxf_case.Haobc_dxf_Case: 竞彩篮球大小分玩法流程测试</td>
+    <td>18</td>
+    <td>17</td>
+    <td>0</td>
+    <td>1</td>
+    <td><a href="javascript:showClassDetail('c1',18)">详情</a></td>
+</tr>
+
+<tr id='pt1.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_10_case: 选择一天中所有比赛场次流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.1')" >
+        通过</a></span>
+
+    <div id='div_pt1.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.1: 没有弹窗
+['match20180206']
+有8场比赛
+有8场比赛
+[8, 8]
+['game_group', 'game_group']
+我已经展开了
+关闭
+我已经展开了
+关闭
+0
+8
+我已经展开了
+1
+2
+3
+4
+5
+6
+7
+8
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft1.2' class='none'>
+    <td ><div class='testcase'>test_haobc_dxf_2_case: 选择两场比赛流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft1.2')" >
+        错误</a></span>
+
+    <div id='div_ft1.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft1.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft1.2: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_dxf_case.py", line 33, in test_haobc_dxf_2_case
+    cl.submit_order_to_station_owner_button()  # 提交订单给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.3' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_8_case: 选择8场比赛，流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.3')" >
+        通过</a></span>
+
+    <div id='div_pt1.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.3: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+1
+2
+3
+4
+5
+6
+7
+8
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.4' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_9_case: 选择九场比赛，获取“最大场次限制8场”提示，测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.4')" >
+        通过</a></span>
+
+    <div id='div_pt1.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.4: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+1
+2
+3
+4
+5
+6
+7
+8
+当前场次小于8场
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.5' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_choose_num_clear_button_case: 选号页面清除所选比赛流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.5')" >
+        通过</a></span>
+
+    <div id='div_pt1.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.5: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+['match20180206']
+有8场比赛
+[8]
+['game_group on']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+3串1
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.6' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_click_all: 点击页面展示所有比赛，测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.6')" >
+        通过</a></span>
+
+    <div id='div_pt1.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.6: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+['match20180206']
+我已经展开了
+我已经展开了
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.7' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_delete_all_event_case: 验证删除选择的全部赛事图标，流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.7')" >
+        通过</a></span>
+
+    <div id='div_pt1.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.7: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+['match20180206']
+有8场比赛
+[8]
+['game_group on']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+4串1
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.8' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_delete_one_event_case: 验证单个删除赛事X按钮，流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.8')" >
+        通过</a></span>
+
+    <div id='div_pt1.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.8: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.9' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_edit_event_case: 验证投注确认页编辑赛事按钮测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.9')" >
+        通过</a></span>
+
+    <div id='div_pt1.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.9: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+['match20180206']
+有8场比赛
+[8]
+['game_group on']
+我已经展开了
+关闭
+match20180206
+8
+我已经展开了
+3串1
+3串1
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.10' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_input_throw_times_case: 输入投注3倍测试流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.10')" >
+        通过</a></span>
+
+    <div id='div_pt1.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.10: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.11' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_throw100_case: 选择投100倍流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.11')" >
+        通过</a></span>
+
+    <div id='div_pt1.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.11: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+('css selector', "li[val='100']")
+('css selector', "li[val='100']")
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.12' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_throw10_case: 选择投10倍流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.12')" >
+        通过</a></span>
+
+    <div id='div_pt1.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.12: 没有弹窗
+[]
+有8场比赛
+[8]
+['game_group']
+暂无赛事，已返回
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.13' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_throw20_case: 选择投20倍流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.13')" >
+        通过</a></span>
+
+    <div id='div_pt1.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.13: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+('css selector', "li[val='20']")
+('css selector', "li[val='20']")
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.14' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_throw50_case: 选择投50倍流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.14')" >
+        通过</a></span>
+
+    <div id='div_pt1.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.14: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+('css selector', "li[val='50']")
+('css selector', "li[val='50']")
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.15' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_throw80_case: 选择投80倍流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.15')" >
+        通过</a></span>
+
+    <div id='div_pt1.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.15: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+('css selector', "li[val='80']")
+('css selector', "li[val='80']")
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.16' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_throw_add_btn_case: 点击投注倍数的+按钮流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.16')" >
+        通过</a></span>
+
+    <div id='div_pt1.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.16: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.17' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_throw_sub_btn_case: 点击投注倍数的-按钮流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.17')" >
+        通过</a></span>
+
+    <div id='div_pt1.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.17: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt1.18' class='hiddenRow'>
+    <td ><div class='testcase'>test_haobc_dxf_throw_way_case: 改变默认投注过关方式流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt1.18')" >
+        通过</a></span>
+
+    <div id='div_pt1.18' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt1.18').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt1.18: 没有弹窗
+没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['game_group']
+我已经展开了
+关闭
+0
+8
+我已经展开了
+1
+2
+3
+4
+5
+6
+7
+8
+[&lt;selenium.webdriver.remote.webelement.WebElement (session="48cf9d80b1a5c49ca85cd6d48d0fbeee", element="0.4460998196199337-33")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="48cf9d80b1a5c49ca85cd6d48d0fbeee", element="0.4460998196199337-34")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="48cf9d80b1a5c49ca85cd6d48d0fbeee", element="0.4460998196199337-35")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="48cf9d80b1a5c49ca85cd6d48d0fbeee", element="0.4460998196199337-36")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="48cf9d80b1a5c49ca85cd6d48d0fbeee", element="0.4460998196199337-37")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="48cf9d80b1a5c49ca85cd6d48d0fbeee", element="0.4460998196199337-38")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="48cf9d80b1a5c49ca85cd6d48d0fbeee", element="0.4460998196199337-39")&gt;]
+6串1
+6串1
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr class='errorClass'>
+    <td>Haobc.test_Ahaobc_mix_case.BaskrtBall_mix_case: 竞彩篮球，混合玩法</td>
+    <td>29</td>
+    <td>10</td>
+    <td>0</td>
+    <td>19</td>
+    <td><a href="javascript:showClassDetail('c2',29)">详情</a></td>
+</tr>
+
+<tr id='pt2.1' class='hiddenRow'>
+    <td ><div class='testcase'>test_Event_analysis_data_case: 竞蓝选号页，点击对阵左边下拉三角，展开赛事分析数据，点击页面下方的投注竞彩篮球按钮，页面跳转到选号页</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.1')" >
+        通过</a></span>
+
+    <div id='div_pt2.1' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.1').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.1: 没有弹窗
+['match20180206']
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第1排的第2个结果
+第1天第2场赛事的第2排的第1个结果
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.2' class='none'>
+    <td ><div class='testcase'>test_Play_mix_Add_event: 验证添加/编辑赛事按钮，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.2')" >
+        错误</a></span>
+
+    <div id='div_ft2.2' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.2').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.2: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第2排的第1个结果
+第1天第2场赛事的第2排的第2个结果
+第1天第3场赛事的第1排的第2个结果
+第1天第4场赛事的第1排的第2个结果
+玩
+法
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 180, in test_Play_mix_Add_event
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.3' class='none'>
+    <td ><div class='testcase'>test_Play_mix_Btn_add: 验证修改倍数 +功能，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.3')" >
+        错误</a></span>
+
+    <div id='div_ft2.3' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.3').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.3: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第1排的第2个结果
+第1天第2场赛事的第1排的第1个结果
+第1天第3场赛事的第2排的第2个结果
+第1天第4场赛事的第1排的第1个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 317, in test_Play_mix_Btn_add
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.4' class='none'>
+    <td ><div class='testcase'>test_Play_mix_Btn_eighty: 验证80倍按钮功能，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.4')" >
+        错误</a></span>
+
+    <div id='div_ft2.4' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.4').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.4: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第2排的第2个结果
+第1天第2场赛事的第2排的第2个结果
+第1天第3场赛事的第1排的第1个结果
+第1天第4场赛事的第2排的第1个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 425, in test_Play_mix_Btn_eighty
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.5' class='none'>
+    <td ><div class='testcase'>test_Play_mix_Btn_fifty: 验证50倍按钮功能，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.5')" >
+        错误</a></span>
+
+    <div id='div_ft2.5' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.5').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.5: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第1排的第1个结果
+第1天第2场赛事的第1排的第1个结果
+第1天第3场赛事的第2排的第1个结果
+第1天第4场赛事的第1排的第1个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 398, in test_Play_mix_Btn_fifty
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.6' class='none'>
+    <td ><div class='testcase'>test_Play_mix_Btn_hundred: 验证100倍按钮功能，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.6')" >
+        错误</a></span>
+
+    <div id='div_ft2.6' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.6').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.6: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第2排的第1个结果
+第1天第2场赛事的第2排的第1个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 452, in test_Play_mix_Btn_hundred
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.7' class='none'>
+    <td ><div class='testcase'>test_Play_mix_Btn_less: 验证修改倍数 - 功能，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.7')" >
+        错误</a></span>
+
+    <div id='div_ft2.7' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.7').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.7: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第1排的第1个结果
+第1天第2场赛事的第1排的第1个结果
+第1天第3场赛事的第1排的第2个结果
+第1天第4场赛事的第2排的第1个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 290, in test_Play_mix_Btn_less
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.8' class='none'>
+    <td ><div class='testcase'>test_Play_mix_Btn_ten: 验证10倍按钮功能，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.8')" >
+        错误</a></span>
+
+    <div id='div_ft2.8' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.8').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.8: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第1排的第1个结果
+第1天第2场赛事的第1排的第1个结果
+第1天第3场赛事的第2排的第1个结果
+第1天第4场赛事的第2排的第1个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 344, in test_Play_mix_Btn_ten
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.9' class='none'>
+    <td ><div class='testcase'>test_Play_mix_Btn_twenty: 验证20倍按钮功能，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.9')" >
+        错误</a></span>
+
+    <div id='div_ft2.9' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.9').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.9: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第1排的第1个结果
+第1天第2场赛事的第2排的第1个结果
+第1天第3场赛事的第1排的第1个结果
+第1天第4场赛事的第2排的第2个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 371, in test_Play_mix_Btn_twenty
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.10' class='none'>
+    <td ><div class='testcase'>test_Play_mix_More_case: 验证选号页面点击展开更多，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.10')" >
+        错误</a></span>
+
+    <div id='div_ft2.10' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.10').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.10: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+点击1天赛事
+['game_group']
+game_group
+第1场赛事展开更多
+['10001', '10002', '10004', '10003']
+['10001', '10002', '10004', '10003']
+第2场赛事展开更多
+['10001', '10002', '10004', '10003']
+['10001', '10002', '10004', '10003']
+第3场赛事展开更多
+['10001', '10002', '10004', '10003']
+['10001', '10002', '10004', '10003']
+第4场赛事展开更多
+['10002', '10004']
+['10002', '10004']
+第5场赛事展开更多
+['10002', '10004']
+['10002', '10004']
+第6场赛事展开更多
+['10001', '10002', '10004', '10003']
+['10001', '10002', '10004', '10003']
+第7场赛事展开更多
+['10001', '10002', '10004', '10003']
+['10001', '10002', '10004', '10003']
+第8场赛事展开更多
+['10002', '10004']
+['10002', '10004']
+有8场比赛
+[8]
+['match20180206']
+['game_group on fold']
+game_group on fold
+没有展开赛事
+点击第1天第1场赛事展开更多
+['10001', '10002', '10004', '10003']
+点击第1天第2场赛事展开更多
+['10001', '10002', '10004', '10003']
+点击第1天第4场赛事展开更多
+['10002', '10004']
+点击第1天第6场赛事展开更多
+['10001', '10002', '10004', '10003']
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 128, in test_Play_mix_More_case
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.11' class='none'>
+    <td ><div class='testcase'>test_Play_mix_N_del: 验证删除赛事X按钮，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.11')" >
+        错误</a></span>
+
+    <div id='div_ft2.11' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.11').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.11: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第1排的第1个结果
+第1天第2场赛事的第1排的第2个结果
+第1天第3场赛事的第1排的第1个结果
+第1天第4场赛事的第1排的第1个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 207, in test_Play_mix_N_del
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.12' class='none'>
+    <td ><div class='testcase'>test_Play_mix_Pf_bouns: 验证过关功能，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.12')" >
+        错误</a></span>
+
+    <div id='div_ft2.12' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.12').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.12: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第1排的第1个结果
+第1天第2场赛事的第2排的第1个结果
+第1天第3场赛事的第1排的第1个结果
+第1天第4场赛事的第2排的第2个结果
+第1天第5场赛事的第2排的第1个结果
+第1天第6场赛事的第2排的第2个结果
+第1天第7场赛事的第1排的第2个结果
+第1天第8场赛事的第1排的第1个结果
+[&lt;selenium.webdriver.remote.webelement.WebElement (session="78a085de78dfc33b790e53b21eee987d", element="0.6359060579370712-24")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="78a085de78dfc33b790e53b21eee987d", element="0.6359060579370712-25")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="78a085de78dfc33b790e53b21eee987d", element="0.6359060579370712-26")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="78a085de78dfc33b790e53b21eee987d", element="0.6359060579370712-27")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="78a085de78dfc33b790e53b21eee987d", element="0.6359060579370712-28")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="78a085de78dfc33b790e53b21eee987d", element="0.6359060579370712-29")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="78a085de78dfc33b790e53b21eee987d", element="0.6359060579370712-30")&gt;]
+3串1
+3串1
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 479, in test_Play_mix_Pf_bouns
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.13' class='none'>
+    <td ><div class='testcase'>test_Play_mix_Pf_del_icon: 验证删除选择的全部赛事图标，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.13')" >
+        错误</a></span>
+
+    <div id='div_ft2.13' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.13').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.13: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第1排的第2个结果
+第1天第2场赛事的第2排的第2个结果
+第1天第3场赛事的第2排的第2个结果
+第1天第4场赛事的第2排的第1个结果
+有8场比赛
+[8]
+['match20180206']
+['game_group on fold']
+game_group on fold
+没有展开赛事
+第1天第1场赛事的第2排的第1个结果
+第1天第2场赛事的第2排的第1个结果
+第1天第3场赛事的第2排的第2个结果
+第1天第4场赛事的第1排的第1个结果
+已选4场比赛
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 237, in test_Play_mix_Pf_del_icon
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.14' class='none'>
+    <td ><div class='testcase'>test_Play_mix_Times_input: 验证修改倍数输入框功能，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.14')" >
+        错误</a></span>
+
+    <div id='div_ft2.14' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.14').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.14: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第2排的第2个结果
+第1天第2场赛事的第1排的第1个结果
+第1天第3场赛事的第2排的第2个结果
+第1天第4场赛事的第2排的第2个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 263, in test_Play_mix_Times_input
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.15' class='none'>
+    <td ><div class='testcase'>test_Play_mix_choosenumber_eight_case: 验证选号页面点击8场赛事，支付流程，若运行不成功，查看是否点击重复的场次</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.15')" >
+        错误</a></span>
+
+    <div id='div_ft2.15' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.15').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.15: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第1排的第1个结果
+第1天第2场赛事的第1排的第1个结果
+第1天第3场赛事的第1排的第2个结果
+第1天第4场赛事的第2排的第2个结果
+第1天第5场赛事的第2排的第2个结果
+第1天第6场赛事的第2排的第2个结果
+第1天第7场赛事的第1排的第1个结果
+第1天第8场赛事的第1排的第2个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 83, in test_Play_mix_choosenumber_eight_case
+    hc.submit_order_to_station_owner_button()# 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.16' class='none'>
+    <td ><div class='testcase'>test_Play_mix_choosenumber_nine_case: 验证选号页面点击9场赛事，支付流程，若运行不成功，查看是否点击重复的场次</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.16')" >
+        错误</a></span>
+
+    <div id='div_ft2.16' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.16').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.16: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第2排的第1个结果
+第1天第2场赛事的第1排的第2个结果
+第1天第3场赛事的第2排的第2个结果
+第1天第4场赛事的第2排的第1个结果
+第1天第5场赛事的第1排的第1个结果
+第1天第6场赛事的第1排的第2个结果
+第1天第7场赛事的第2排的第2个结果
+第1天第8场赛事的第1排的第2个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 105, in test_Play_mix_choosenumber_nine_case
+    hc.submit_order_to_station_owner_button()# 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.17' class='none'>
+    <td ><div class='testcase'>test_Play_mix_choosenumber_too_case: 验证选号页面点击2场赛事，支付流程，若运行不成功，查看是否点击重复的场次</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.17')" >
+        错误</a></span>
+
+    <div id='div_ft2.17' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.17').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.17: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第2排的第2个结果
+第1天第2场赛事的第1排的第1个结果
+已选2场比赛
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 61, in test_Play_mix_choosenumber_too_case
+    hc.submit_order_to_station_owner_button()# 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.18' class='none'>
+    <td ><div class='testcase'>test_Play_mix_choosnumber: 验证混合玩法赛事结果功能，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.18')" >
+        错误</a></span>
+
+    <div id='div_ft2.18' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.18').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.18: 没有弹窗
+[8]
+['match20180206']
+点击第1天赛事
+第1场赛事
+第2场赛事
+第3场赛事
+第4场赛事
+第5场赛事
+第6场赛事
+第7场赛事
+第8场赛事
+[8]
+['match20180206']
+['game_group on']
+game_group on
+收起赛事展示
+第1天第8场赛事的第2排的第2个结果
+第1天第7场赛事的第1排的第2个结果
+第1天第4场赛事的第2排的第1个结果
+第1天第8场赛事的第2排的第1个结果
+第1天第3场赛事的第1排的第1个结果
+第1天第6场赛事的第1排的第2个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 37, in test_Play_mix_choosnumber
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.19' class='none'>
+    <td ><div class='testcase'>test_Play_mix_emptying: 验证选号页面清空按钮功能，支付流程</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.19')" >
+        错误</a></span>
+
+    <div id='div_ft2.19' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.19').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.19: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第2排的第1个结果
+第1天第2场赛事的第2排的第1个结果
+第1天第3场赛事的第2排的第1个结果
+第1天第4场赛事的第2排的第1个结果
+有8场比赛
+[8]
+['match20180206']
+['game_group on fold']
+game_group on fold
+没有展开赛事
+第1天第1场赛事的第1排的第1个结果
+第1天第2场赛事的第2排的第1个结果
+第1天第3场赛事的第1排的第2个结果
+第1天第4场赛事的第1排的第2个结果
+第1天第5场赛事的第1排的第1个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 153, in test_Play_mix_emptying
+    hc.submit_order_to_station_owner_button()  # 点击提交给站主
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\UnionLotto\confirm_lottery.py", line 868, in submit_order_to_station_owner_button
+    self.wait_element_located(self.driver,self.submit_order_to_station_owner_button_loc)#显示等待提交按钮出现，进行点击操作
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\base.py", line 109, in wait_element_located
+    wait.until(EC.visibility_of_element_located(locator))
+  File "C:\Users\lenovo\AppData\Local\Programs\Python\Python36\lib\site-packages\selenium\webdriver\support\wait.py", line 80, in until
+    raise TimeoutException(message, screen, stacktrace)
+selenium.common.exceptions.TimeoutException: Message: 
+
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.20' class='hiddenRow'>
+    <td ><div class='testcase'>test_continue_toggle_play_case: 胜负玩法，点击编辑赛事，回到选号选号页面，切换玩法为混合投注</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.20')" >
+        通过</a></span>
+
+    <div id='div_pt2.20' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.20').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.20: 没有弹窗
+['match20180206']
+有5场比赛
+[5]
+['game_group']
+我已经展开了
+关闭
+0
+5
+我已经展开了
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第2排的第1个结果
+第1天第2场赛事的第2排的第2个结果
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.21' class='hiddenRow'>
+    <td ><div class='testcase'>test_delete_double_event_case: 选择两场赛事，验证单个删除多场赛事X按钮，流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.21')" >
+        通过</a></span>
+
+    <div id='div_pt2.21' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.21').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.21: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第2排的第2个结果
+第1天第2场赛事的第2排的第2个结果
+有8场比赛
+[8]
+['match20180206']
+['game_group on fold']
+game_group on fold
+没有展开赛事
+第1天第1场赛事的第2排的第2个结果
+第1天第2场赛事的第1排的第1个结果
+第1天第3场赛事的第1排的第2个结果
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.22' class='hiddenRow'>
+    <td ><div class='testcase'>test_delete_one_event_case: 验证单个删除赛事X按钮，流程测试</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.22')" >
+        通过</a></span>
+
+    <div id='div_pt2.22' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.22').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.22: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第2排的第2个结果
+第1天第2场赛事的第1排的第2个结果
+第1天第3场赛事的第2排的第1个结果
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.23' class='hiddenRow'>
+    <td ><div class='testcase'>test_immediately_reture_homepage: 在投注选号页面，点击右上角即时比分，可以打开并返回首页</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.23')" >
+        通过</a></span>
+
+    <div id='div_pt2.23' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.23').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.23: 没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.24' class='hiddenRow'>
+    <td ><div class='testcase'>test_immediately_sorce_lottery_case: 在投注选号页面，点击右上角即时比分，打开赛事分析数据，点击页面下方的投注竞彩足球按钮，页面跳转到选号页，选择两场比赛，提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.24')" >
+        通过</a></span>
+
+    <div id='div_pt2.24' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.24').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.24: 没有弹窗
+['20180207']
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第2排的第1个结果
+第1天第2场赛事的第1排的第2个结果
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.25' class='hiddenRow'>
+    <td ><div class='testcase'>test_jxks_play_case: 验证玩法</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.25')" >
+        通过</a></span>
+
+    <div id='div_pt2.25' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.25').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.25: 没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.26' class='hiddenRow'>
+    <td ><div class='testcase'>test_paintball_rqspf_chage_throw_all_way: 选号页面，任意选择六场对阵，进入投注确认页，选择串关为6串1、5串1、4串1，3串1，2串1组合，提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.26')" >
+        通过</a></span>
+
+    <div id='div_pt2.26' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.26').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.26: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第1排的第2个结果
+第1天第2场赛事的第2排的第2个结果
+第1天第3场赛事的第1排的第1个结果
+第1天第4场赛事的第1排的第2个结果
+第1天第5场赛事的第2排的第2个结果
+第1天第6场赛事的第1排的第2个结果
+过关方式列表[&lt;selenium.webdriver.remote.webelement.WebElement (session="b02b210a3f84f579292cc8fa6b3f7ee2", element="0.8879027208894708-20")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="b02b210a3f84f579292cc8fa6b3f7ee2", element="0.8879027208894708-21")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="b02b210a3f84f579292cc8fa6b3f7ee2", element="0.8879027208894708-22")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="b02b210a3f84f579292cc8fa6b3f7ee2", element="0.8879027208894708-23")&gt;, &lt;selenium.webdriver.remote.webelement.WebElement (session="b02b210a3f84f579292cc8fa6b3f7ee2", element="0.8879027208894708-24")&gt;]
+2串1,3串1,4串1,5串1,6串1
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.27' class='hiddenRow'>
+    <td ><div class='testcase'>test_patintball_rqspf_input10000times_case: 选号页面，选择八场对阵，增加倍数为10000倍，提交订单</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.27')" >
+        通过</a></span>
+
+    <div id='div_pt2.27' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.27').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.27: 没有弹窗
+有8场比赛
+[8]
+['match20180206']
+['game_group']
+game_group
+收起赛事展示
+第1天第1场赛事的第1排的第2个结果
+第1天第2场赛事的第1排的第1个结果
+第1天第3场赛事的第2排的第2个结果
+第1天第4场赛事的第2排的第2个结果
+第1天第5场赛事的第2排的第2个结果
+第1天第6场赛事的第2排的第2个结果
+第1天第7场赛事的第1排的第1个结果
+第1天第8场赛事的第1排的第1个结果
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='pt2.28' class='hiddenRow'>
+    <td ><div class='testcase'>test_play_instruction_open_close_case: 在投注选号页面，点击右上角玩法说明，可以打开和关闭</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status passCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_pt2.28')" >
+        通过</a></span>
+
+    <div id='div_pt2.28' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_pt2.28').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+pt2.28: 没有弹窗
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='ft2.29' class='none'>
+    <td ><div class='testcase'>test_seven_color_Del_all_nu_ok_case: 验证确认投注页面，点击删除选号，点击确定</div></td>
+    <td colspan='5' align='center'>
+
+    <!--css div popup start-->
+    <span class='status errorCase'>
+    <a class="popup_link" onfocus='this.blur();' href="javascript:showTestDetail('div_ft2.29')" >
+        错误</a></span>
+
+    <div id='div_ft2.29' class="popup_window">
+        <div style='text-align: right; color:red;cursor:pointer'>
+        <a onfocus='this.blur();' onclick="document.getElementById('div_ft2.29').style.display = 'none' " >
+           [x]</a>
+        </div>
+        <pre>
+        
+ft2.29: 没有弹窗
+有8场比赛
+[8]
+['match20180206', 'match20180206']
+['game_group', 'game_group']
+game_group
+收起赛事展示
+game_group
+收起赛事展示
+第1天第1场赛事的第1排的第2个结果
+第1天第2场赛事的第1排的第2个结果
+Traceback (most recent call last):
+  File "D:\自动化\脚本\交互版本\caipiao0.5\test_case\Lelun\Haobc\test_Ahaobc_mix_case.py", line 784, in test_seven_color_Del_all_nu_ok_case
+    aa = hb1.Basketball_mix_nus_X(2)  # 选择比赛
+  File "D:\自动化\脚本\交互版本\caipiao0.5\element_operate\Haobc\haobc_choose_number.py", line 5361, in Basketball_mix_nus_X
+    for n in range(1, ns[i] + 1):  ###随机取1个a对应的场次
+IndexError: list index out of range
+
+
+        </pre>
+    </div>
+    <!--css div popup end-->
+
+    </td>
+</tr>
+
+<tr id='total_row'>
+    <td>统计</td>
+    <td>47</td>
+    <td>27</td>
+    <td>0</td>
+    <td>20</td>
+    <td>&nbsp;</td>
+</tr>
+</table>
+<td>&nbsp;</td>
+<script>
+    drawCircle(27, 0, 20)
+</script>
+
+<div id='ending'>&nbsp;</div>
+
+</body>
+</html>
